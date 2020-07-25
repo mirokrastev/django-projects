@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Welcome!</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="container text-center">
+        <h1 style="font-weight: bold">Password Generator</h1>
+        <form action="{% url 'password' %}">
+        Length:
+            <select name="length">
+                {% for num in pass_length %}
+
+                    {% if num == 12 %}
+                        <option value="12" selected="selected">12</option>
+                        continue
+                    {% endif %}
+
+                    <option value="{{ num }}">{{ num }}</option>
+                {% endfor %}
+            </select>
+
+            <br>
+
+            <input type="checkbox" name="uppercase"> Uppercase
+            <br>
+            <input type="checkbox" name="numbers"> Number
+            <br>
+            <input type="checkbox" name="special"> Special characters
+            <br><br>
+            <input type="submit" value="Generate Password" class="btn btn-primary">
+        </form>
+
+        <br><br>
+        <a href="{% url 'about' %}" class="btn btn-primary">About</a>
+    </div>
+{% endblock content %}
