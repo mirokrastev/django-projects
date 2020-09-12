@@ -15,13 +15,11 @@
     <div class="container text-center">
         <a class="navbar-brand" href="{% url 'home' %}">My Site</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
             </ul>
-
             {% if user.is_authenticated %}
                 <p>You are logged in as {{ user.username }}</p>
                 <form action="{% url 'logout_f' %}" method="POST">
@@ -31,20 +29,15 @@
 
             {% else %}
                 <form action="{% url 'login_f' %}" method="GET">
-                    {% csrf_token %}
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
                 <form action="{% url 'register' %}" method="GET">
-                    {% csrf_token %}
                     <button type="submit" class="btn btn-primary" style="margin-left: 10px">Register</button>
                 </form>
             {% endif %}
-
         </div>
     </div>
 </nav>
-
 {% block content %}{% endblock content %}
-
 </body>
 </html>
