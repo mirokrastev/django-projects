@@ -1,5 +1,5 @@
 # Email-System
-This is a basic Auth System.<br>
+This is a basic Email System.<br>
 <br>
 The system sends message to every email in the Database. You can specify your email in the Sign Up page or in the main page.<br>
 <hr>
