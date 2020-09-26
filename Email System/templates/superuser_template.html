@@ -1,0 +1,12 @@
+{% extends 'home.html' %}
+
+{% block admin_privileges %}<br>
+    <ul>
+    {% for email in all_emails %}
+    <li>{{ email }}</li>
+    {% endfor %}
+    </ul><br>
+    <form action="{% url 'send' %}">
+        <button>Send Email</button>
+    </form>
+{% endblock admin_privileges %}
