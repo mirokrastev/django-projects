@@ -1,2 +1,2 @@
 # django-projects
-Web Apps, built with Django framework
+Websites, built with Django framework
