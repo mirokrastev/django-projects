@@ -1,2 +1,2 @@
 # django-projects
-Websites, built with Django framework
+Small, one-off test sites, built with Django. They are nothing special, just some small encapsulated functionality.
