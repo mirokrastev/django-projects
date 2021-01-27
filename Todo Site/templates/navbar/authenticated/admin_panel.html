@@ -1,5 +1,0 @@
-{% load url_helper %}
-
-{% if request.user.is_superuser %}
-<a class="dropdown-item" href="{% get_admin_url request.scheme request.get_host %}">Admin panel</a>
-{% endif %}
