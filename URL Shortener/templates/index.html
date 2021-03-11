@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}URL Shortener{% endblock %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm">
+                <br>
+                <div class="redirect">
+                    Redirect with URL Alias:<br><br>
+                    <form method="POST" action="{% url 'redirect' None %}">
+                        {% csrf_token %}
+                        <label for="alias">Alias:</label>
+                        <input type="text" name="alias" id="alias">
+                        <br><br>
+                        <button>Redirect</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm">
+                <br>
+                <div class="create">
+                    Create new URL Alias:<br><br>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button>Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    document.querySelector('.redirect form')
+    .addEventListener('submit', (e) => {
+        e.preventDefault();
+        let partialUrl = e.target.action.slice(0, e.target.action.indexOf('/None/'));
+        const alias = e.target.querySelector('#alias').value;
+        e.target.action = `${partialUrl}/${alias}/`;
+        e.target.submit();
+    })
+</script>
+{% endblock scripts %}
