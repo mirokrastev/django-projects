@@ -7,6 +7,8 @@ from urlshortener.common import generate_alias
 
 
 class APICreateURL(APIView):
+    authentication_classes = []
+
     def dispatch(self, request, *args, **kwargs):
         if not self.request.method == 'POST':
             return JsonResponse({'error': 'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
