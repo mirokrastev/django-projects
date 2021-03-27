@@ -26,7 +26,7 @@
                 <br>
                 <div class="create">
                     Create new URL Alias:<br><br>
-                    <form method="POST">
+                    <form method="POST" action="{% url 'create' %}">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <button>Create</button>
