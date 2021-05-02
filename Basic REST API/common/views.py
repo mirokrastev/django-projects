@@ -1,59 +1,39 @@
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework import permissions
+from rest_framework import permissions, status, generics
 from common.models import List
 from common.serializers import ListSerializer
 
 
-class ListAPI(APIView):
+class ListAPI(generics.GenericAPIView):
     model = List
     serializer_class = ListSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, *args, **kwargs):
-        data = self.serializer_class(self.model.objects.all(), many=True)
-        return Response(data.data)
+        serializer = self.serializer_class(self.model.objects.all(), many=True)
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=self.request.data)
+        serializer = self.get_serializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save(owner=self.request.user)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_403_FORBIDDEN)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class SingleListAPI(APIView):
+class SingleListAPI(generics.RetrieveUpdateDestroyAPIView):
     model = List
     serializer_class = ListSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.object = None
+    def put(self, request, *args, **kwargs): return self.check_owner()
 
-    def dispatch(self, request, *args, **kwargs):
-        pk = kwargs.pop('pk')
-        self.object = self.get_object(pk=pk, **kwargs)
-        return super().dispatch(self.request, *args, **kwargs)
+    def delete(self, request, *args, **kwargs): return self.check_owner()
 
-    def get(self, request, *args, **kwargs):
-        return Response(data=self.serializer_class(self.object).data, status=status.HTTP_200_OK)
-
-    def put(self, request, *args, **kwargs):
-        if not self.request.user == self.object.owner:
+    def check_owner(self, *args, **kwargs):
+        instance = self.get_object()
+        if not instance.owner == self.request.user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        serializer = self.serializer_class(instance=self.object, data=self.request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_403_FORBIDDEN)
-
-    def delete(self, request, *args, **kwargs):
-        if not self.request.user == self.object.owner:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        self.object.delete()
-        return Response(data=self.serializer_class(self.object).data, status=status.HTTP_200_OK)
-
-    def get_object(self, pk, **kwargs):
-        return self.model.objects.get(pk=pk, **kwargs)
+        return super().put(self.request, *args, **kwargs)

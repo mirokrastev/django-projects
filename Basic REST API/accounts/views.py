@@ -33,5 +33,4 @@ class RegisterAPIView(APIView):
         return Response(data={'token': str(token)}, status=status.HTTP_201_CREATED)
 
 
-class LoginAPIView(ObtainAuthToken):
-    pass
+LoginAPIView = ObtainAuthToken
