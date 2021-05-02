@@ -5,12 +5,12 @@ from common.serializers import ListSerializer
 
 
 class ListAPI(generics.GenericAPIView):
-    model = List
     serializer_class = ListSerializer
+    queryset = List.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, *args, **kwargs):
-        serializer = self.serializer_class(self.model.objects.all(), many=True)
+        serializer = self.serializer_class(self.get_queryset(), many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
@@ -24,8 +24,8 @@ class ListAPI(generics.GenericAPIView):
 
 
 class SingleListAPI(generics.RetrieveUpdateDestroyAPIView):
-    model = List
     serializer_class = ListSerializer
+    queryset = List.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def put(self, request, *args, **kwargs): return self.check_owner()

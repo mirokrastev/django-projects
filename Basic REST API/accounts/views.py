@@ -7,10 +7,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 
 
 class RegisterAPIView(APIView):
-    permission_classes = [
-        permissions.AllowAny
-    ]
     serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.method == 'POST':
