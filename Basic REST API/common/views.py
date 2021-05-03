@@ -10,8 +10,9 @@ class ListAPI(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, *args, **kwargs):
-        serializer = self.serializer_class(self.get_queryset(), many=True)
-        return Response(serializer.data)
+        queryset = self.paginate_queryset(self.get_queryset())
+        serializer = self.serializer_class(queryset, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
